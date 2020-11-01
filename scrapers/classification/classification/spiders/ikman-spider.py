@@ -10,7 +10,7 @@ class IkmanSpider(scrapy.Spider):
 
     def parse(self, response):
         for url in self.start_urls:
-            for page_no in range(5):
+            for page_no in range(2):
                 final_url = url + "?page=" + str(page_no)
                 yield scrapy.Request(final_url, dont_filter=True, callback=self.scrapeList)
 
@@ -26,8 +26,9 @@ class IkmanSpider(scrapy.Spider):
 
         addvertiesment = response.xpath(".//div[contains(@class, 'section--PpGYD')]")
         details = addvertiesment.xpath(".//*[contains(@class, 'two-columns--19Hyo')]")
-
+      
         record = {}
+        record['price'] = addvertiesment.xpath(".//*[contains(@class, 'amount--3NTpl')]//text()").extract_first()
         for infor in details:
             key = infor.xpath(".//*[contains(@class, 'word-break--2nyVq label--3oVZK')]//text()").extract_first()
             value = infor.xpath(".//*[contains(@class, 'word-break--2nyVq value--1lKHt')]//text()").extract_first()
